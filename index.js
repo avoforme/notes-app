@@ -60,16 +60,14 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.get("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  const note = notes.find((note) => note.id === id);
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
-});
+
+app.get('/api/notes/:id', (request, response) => {
+  Note.findById(request.params.id).then(note => {
+    response.json(note)
+  })
+})
 // for backend, Now app.get('/api/notes/:id', ...) will handle all HTTP GET requests that are of the form /api/notes/SOMETHING, where SOMETHING is an arbitrary string.
+//findById is a method of mongoose
 
 // DELETE
 app.delete("/api/notes/:id", (request, response) => {
@@ -91,29 +89,26 @@ const generateId = () => {
   return String(maxId + 1);
 };
 
-app.post("/api/notes", (request, response) => {
+
+app.post('/api/notes', (request, response) => {
   // Without the json-parser, the body property would be undefined.
   // The json-parser takes the JSON data of a request, transforms it into a JavaScript object and then attaches it to the body property of the request object before the route handler is called.
 
-  const body = request.body;
+  const body = request.body
 
-  if (!body.content) {
-    return response.status(400).json({
-      error: "content missing",
-    });
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
-    // Boolean turns a value into a boolean.
-    important: Boolean(body.important) || false,
-    id: generateId(),
-  };
+    important: body.important || false,
+  })
 
-  notes = notes.concat(note);
-
-  response.json(note);
-});
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
+})
 
 // using post-route middleware
 app.use(unknownEndpoint);
