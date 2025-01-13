@@ -1,8 +1,8 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3ODQ2NjZhYjE5YTFlM2EwNDRmZmFhNiIsImlhdCI6MTczNjczMzYzMn0.f85IslKWcofVSeEFP1uU3whLvqqve57dMnVoOYvENSc
 
 {
-  "content": "new post for one user",
-  "important": true,
-  "userId": "6784666ab19a1e3a044ffaa6"
+  "content": "first note using token",
+  "important": true
 }
